@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Query
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import geopandas as gpd
 import pandas as pd
@@ -28,6 +29,11 @@ def compute_risk(gdf_in, w_hazard, w_vuln, w_coping):
     df["risk_tier"] = pd.cut(df["risk_score"], bins=bins, labels=labels, include_lowest=True).astype(str)
     return df
 
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    with open("frontend/index.html") as f:
+        return HTMLResponse(f.read())
+        
 @app.get("/")
 def root():
     return {"status": "ok"}

@@ -1,0 +1,471 @@
+<title>Global Flood Risk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+
+<style>
+/* Leaflet 1.9.4 core CSS - inlined */
+.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:0 0}.leaflet-map-pane canvas,.leaflet-map-pane svg{position:absolute;left:0;top:0}.leaflet-map-pane{z-index:2}.leaflet-tile-pane{z-index:2}.leaflet-overlay-pane{z-index:4}.leaflet-shadow-pane{z-index:5}.leaflet-marker-pane{z-index:6}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:1}.leaflet-map-pane svg{z-index:2}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-popup-pane,.leaflet-control{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:grabbing}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-image-layer,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-marker-icon.leaflet-interactive,.leaflet-image-layer.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#1a1a2e;outline-offset:1px}.leaflet-zoom-box{border:2px dotted #38f;background:rgba(255,255,255,.5)}.leaflet-container{font-family:Helvetica Neue,Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,.65);border-radius:4px}.leaflet-bar a{background-color:#1f2937;border-bottom:1px solid #374151;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#e6edf3}.leaflet-bar a:hover{background-color:#374151}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:bold 18px 'Lucida Console',Monaco,monospace;text-indent:1px}.leaflet-container .leaflet-control-attribution{background:rgba(0,0,0,.5);color:#8b949e;font-size:10px}.leaflet-control-attribution a{color:#58a6ff;text-decoration:none}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#1f2937;color:#e6edf3;box-shadow:0 3px 14px rgba(0,0,0,.6)}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:8px;border:1px solid #30363d}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;transform:rotate(45deg)}.leaflet-popup-content{margin:12px 16px;line-height:1.4;font-size:13px;min-height:1px}.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#8b949e;text-decoration:none;background:0 0}.leaflet-popup-close-button:hover{color:#e6edf3}.leaflet-tooltip{position:absolute;padding:6px 10px;background:#1f2937;border:1px solid #30363d;border-radius:4px;color:#e6edf3;white-space:nowrap;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.4);font-size:12px}
+
+/* Design tokens */
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --vlow: #22c55e;
+  --low: #84cc16;
+  --med: #eab308;
+  --high: #f97316;
+  --vhigh: #ef4444;
+  --nodata: #374151;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  display: flex;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* Sidebar */
+#sidebar {
+  width: 288px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: max(16px, env(safe-area-inset-top,0px))
+            16px
+            max(16px, env(safe-area-inset-bottom,0px))
+            max(16px, env(safe-area-inset-left,0px));
+  gap: 20px;
+}
+
+.brand { padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.brand h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.brand p { font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }
+
+.section-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.sliders { display: flex; flex-direction: column; gap: 14px; }
+.slider-row { display: flex; flex-direction: column; gap: 6px; }
+.slider-header { display: flex; justify-content: space-between; align-items: baseline; }
+.slider-name { font-size: 12px; font-weight: 500; }
+.slider-pct {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+input[type=range]::-moz-range-thumb {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+}
+
+.hint { font-size: 10px; color: var(--muted); font-style: italic; margin-top: 8px; }
+
+.legend { display: flex; flex-direction: column; gap: 6px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+hr { border: none; border-top: 1px solid var(--border); }
+
+.credits {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/* Map */
+#map { flex: 1; min-width: 0; position: relative; }
+
+/* Loading spinner */
+#loading {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(22, 27, 34, .92);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 12px;
+  color: var(--muted);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+#loading.hidden { display: none; }
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Country info panel */
+#info {
+  position: absolute;
+  bottom: 24px; right: 16px;
+  width: 240px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  z-index: 1500;
+  font-size: 12px;
+  line-height: 1.5;
+}
+#info.hidden { display: none; }
+#info h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.risk-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-key { color: var(--muted); }
+.info-val { font-variant-numeric: tabular-nums; font-weight: 500; text-align: right; }
+
+#info-close {
+  position: absolute;
+  top: 8px; right: 10px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px;
+}
+#info-close:hover { color: var(--text); }
+
+/* Mobile */
+@media (max-width: 640px) {
+  body { flex-direction: column; overflow: auto; }
+  #sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    overflow: visible;
+  }
+  #map { height: 65vh; flex: none; }
+  #info { bottom: auto; top: 8px; right: 8px; width: calc(100% - 16px); max-width: 300px; }
+}
+</style>
+
+<!-- ─── Sidebar ─── -->
+<div id="sidebar">
+  <div class="brand">
+    <h1>Global Flood Risk Dashboard</h1>
+    <p>Country-level risk combining INFORM 2026 hazard data with World Bank socioeconomic indicators. Adjust weights to recompute the map live.</p>
+  </div>
+
+  <div>
+    <div class="section-label">Risk Component Weights</div>
+    <div class="sliders">
+      <div class="slider-row">
+        <div class="slider-header">
+          <span class="slider-name">Hazard &amp; Exposure</span>
+          <span class="slider-pct" id="hazard-pct">40%</span>
+        </div>
+        <input type="range" id="w-hazard" min="1" max="99" value="40">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header">
+          <span class="slider-name">Vulnerability</span>
+          <span class="slider-pct" id="vuln-pct">35%</span>
+        </div>
+        <input type="range" id="w-vuln" min="1" max="99" value="35">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header">
+          <span class="slider-name">Lack of Coping Capacity</span>
+          <span class="slider-pct" id="coping-pct">25%</span>
+        </div>
+        <input type="range" id="w-coping" min="1" max="99" value="25">
+      </div>
+    </div>
+    <p class="hint">Weights auto-normalise to 100%.</p>
+  </div>
+
+  <hr>
+
+  <div>
+    <div class="section-label">Risk Tier</div>
+    <div class="legend">
+      <div class="legend-item"><div class="swatch" style="background:var(--vhigh)"></div>Very High (8–10)</div>
+      <div class="legend-item"><div class="swatch" style="background:var(--high)"></div>High (6–8)</div>
+      <div class="legend-item"><div class="swatch" style="background:var(--med)"></div>Medium (4–6)</div>
+      <div class="legend-item"><div class="swatch" style="background:var(--low)"></div>Low (2–4)</div>
+      <div class="legend-item"><div class="swatch" style="background:var(--vlow)"></div>Very Low (0–2)</div>
+      <div class="legend-item"><div class="swatch" style="background:var(--nodata)"></div>No data</div>
+    </div>
+  </div>
+
+  <div class="credits">
+    <strong>Sources</strong><br>
+    INFORM Risk Index 2026 · World Bank Open Data · Natural Earth 110m<br><br>
+    Click any country for a risk breakdown. Tiles © CartoDB / OSM.
+  </div>
+</div>
+
+<!-- ─── Map ─── -->
+<div id="map">
+  <div id="loading"><div class="spinner"></div>Loading risk data…</div>
+  <div id="info" class="hidden">
+    <button id="info-close" title="Close">×</button>
+    <h2 id="info-name"></h2>
+    <div id="info-badge"></div>
+    <div id="info-rows"></div>
+  </div>
+</div>
+
+<!-- Leaflet from cdnjs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<script>
+(function () {
+  /* relative URLs → same origin when served by FastAPI */
+  const API = '';
+
+  const COLOR = {
+    'Very High': '#ef4444',
+    'High':      '#f97316',
+    'Medium':    '#eab308',
+    'Low':       '#84cc16',
+    'Very Low':  '#22c55e'
+  };
+  const BADGE_BG = {
+    'Very High': '#7f1d1d', 'High': '#7c2d12',
+    'Medium': '#713f12', 'Low': '#365314', 'Very Low': '#14532d'
+  };
+
+  let map, geojsonLayer, labelLayer;
+  let debounceTimer;
+  const W = { hazard: 40, vuln: 35, coping: 25 };
+
+  /* ── Map init ── */
+  function initMap() {
+    map = L.map('map', {
+      center: [15, 10],
+      zoom: 2,
+      minZoom: 2,
+      maxBounds: [[-85, -200], [85, 200]]
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com">CartoDB</a>',
+      subdomains: 'abcd',
+      maxZoom: 10
+    }).addTo(map);
+  }
+
+  /* ── Choropleth style ── */
+  function color(tier) { return COLOR[tier] || '#374151'; }
+
+  function style(f) {
+    return {
+      fillColor:   color(f.properties.risk_tier),
+      fillOpacity: 0.72,
+      color:       '#0d1117',
+      weight:      0.6,
+      opacity:     1
+    };
+  }
+
+  /* ── Feature events ── */
+  function onEach(feature, layer) {
+    const p = feature.properties;
+    let tip;
+
+    layer.on({
+      mouseover(e) {
+        e.target.setStyle({ weight: 1.5, color: '#fff', fillOpacity: 0.9 });
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+          e.target.bringToFront();
+        }
+        tip = L.tooltip({ sticky: true })
+          .setContent(
+            `<strong>${p.country || ''}</strong><br>` +
+            `Risk: <strong>${p.risk_score ?? '-'}</strong>/10 (${p.risk_tier || '-'})`
+          )
+          .addTo(map)
+          .setLatLng(e.latlng);
+      },
+      mousemove(e) { if (tip) tip.setLatLng(e.latlng); },
+      mouseout(e) {
+        geojsonLayer.resetStyle(e.target);
+        if (tip) { map.removeLayer(tip); tip = null; }
+      },
+      click() { showInfo(p); }
+    });
+  }
+
+  /* ── Load / reload risk GeoJSON ── */
+  async function loadRisk() {
+    setLoading(true);
+    const t = W.hazard + W.vuln + W.coping;
+    const qs = [
+      `w_hazard=${(W.hazard / t).toFixed(3)}`,
+      `w_vuln=${(W.vuln   / t).toFixed(3)}`,
+      `w_coping=${(W.coping / t).toFixed(3)}`
+    ].join('&');
+
+    try {
+      const res = await fetch(`${API}/risk?${qs}`);
+      if (!res.ok) throw new Error(res.statusText);
+      const data = await res.json();
+
+      if (geojsonLayer) map.removeLayer(geojsonLayer);
+      if (labelLayer)   map.removeLayer(labelLayer);
+
+      geojsonLayer = L.geoJSON(data, { style, onEachFeature: onEach }).addTo(map);
+
+      /* country name labels rendered on top of fill */
+      labelLayer = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
+        { subdomains: 'abcd', maxZoom: 10, pane: 'overlayPane' }
+      ).addTo(map);
+
+    } catch (err) {
+      console.error('Failed to load risk data:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  /* ── Sliders ── */
+  function initSliders() {
+    [
+      ['w-hazard', 'hazard', 'hazard-pct'],
+      ['w-vuln',   'vuln',   'vuln-pct'],
+      ['w-coping', 'coping', 'coping-pct']
+    ].forEach(([id, key, pctId]) => {
+      document.getElementById(id).addEventListener('input', function () {
+        W[key] = +this.value;
+        updatePcts();
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(loadRisk, 700);
+      });
+    });
+    updatePcts();
+  }
+
+  function updatePcts() {
+    const t = W.hazard + W.vuln + W.coping;
+    document.getElementById('hazard-pct').textContent = Math.round(W.hazard / t * 100) + '%';
+    document.getElementById('vuln-pct').textContent   = Math.round(W.vuln   / t * 100) + '%';
+    document.getElementById('coping-pct').textContent = Math.round(W.coping / t * 100) + '%';
+  }
+
+  /* ── Country detail panel ── */
+  function showInfo(p) {
+    const tier = p.risk_tier || 'Unknown';
+    document.getElementById('info-name').textContent = p.country || p.iso3 || '';
+    document.getElementById('info-badge').innerHTML =
+      `<span class="risk-badge" style="background:${BADGE_BG[tier] || '#374151'};color:${color(tier)}">${tier}</span>`;
+
+    const fmt  = (v, d = 1) => (v != null && !isNaN(v)) ? (+v).toFixed(d) : '-';
+    const fmtM = v => v ? (v / 1e6).toFixed(1) + 'M' : '-';
+
+    const rows = [
+      ['Risk Score',    fmt(p.risk_score) + ' / 10'],
+      ['Hazard',        fmt(p.hazard)],
+      ['Vulnerability', fmt(p.vulnerability)],
+      ['Coping Lack',   fmt(p.coping_lack)],
+      ['Population',    fmtM(p.population)],
+      ['GDP / capita',  p.gdp_per_capita ? '$' + Math.round(p.gdp_per_capita).toLocaleString() : '-']
+    ];
+
+    document.getElementById('info-rows').innerHTML = rows
+      .map(([k, v]) =>
+        `<div class="info-row">
+           <span class="info-key">${k}</span>
+           <span class="info-val">${v}</span>
+         </div>`
+      ).join('');
+
+    document.getElementById('info').classList.remove('hidden');
+  }
+
+  document.getElementById('info-close').addEventListener('click', () => {
+    document.getElementById('info').classList.add('hidden');
+  });
+
+  /* ── Loading state ── */
+  function setLoading(on) {
+    document.getElementById('loading').classList.toggle('hidden', !on);
+  }
+
+  /* ── Boot ── */
+  initMap();
+  initSliders();
+  loadRisk();
+})();
+</script>

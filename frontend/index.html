@@ -271,7 +271,7 @@ hr { border: none; border-top: 1px solid var(--border); }
   <div class="credits">
     <strong>Sources</strong><br>
     INFORM Risk Index 2026 · World Bank Open Data · Natural Earth 110m<br><br>
-    Click any country for a risk breakdown. Tiles © CartoDB / OSM.
+    Click any country for a risk breakdown. Tiles © Esri.
   </div>
 </div>
 
@@ -319,10 +319,9 @@ hr { border: none; border-top: 1px solid var(--border); }
       maxBounds: [[-85, -200], [85, 200]]
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com">CartoDB</a>',
-      subdomains: 'abcd',
-      maxZoom: 10
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '© <a href="https://www.esri.com">Esri</a>',
+    maxZoom: 16
     }).addTo(map);
   }
 
@@ -389,8 +388,8 @@ hr { border: none; border-top: 1px solid var(--border); }
 
       /* country name labels rendered on top of fill */
       labelLayer = L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
-        { subdomains: 'abcd', maxZoom: 10, pane: 'overlayPane' }
+        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+        { maxZoom: 16, pane: 'overlayPane' }
       ).addTo(map);
 
     } catch (err) {
